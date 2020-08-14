@@ -6,6 +6,7 @@ namespace nc
 {
 	void PhysicsComponent::Create(void* data)
 	{
+		m_drag = 0.96f;
 	}
 
 	void PhysicsComponent::Destroy()
@@ -14,8 +15,8 @@ namespace nc
 
 	void PhysicsComponent::Update()
 	{
-		m_velocity = m_velocity + m_force; //*timer.DeltaTimer();
+		m_velocity = m_velocity + m_force * m_owner->m_enigne->GetTime().DeltaTimer();
 		m_velocity = m_velocity * m_drag;
-		m_owner->m_transform.position = m_owner->m_transform.position + m_velocity; //*timer.DeltaTimer();
+		m_owner->m_transform.position = m_owner->m_transform.position + m_velocity * m_owner->m_enigne->GetTime().DeltaTimer();
 	}
 }

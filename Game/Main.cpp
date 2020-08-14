@@ -1,37 +1,75 @@
 #include "pch.h"
 #include "Graphics/Texture.h"
-#include "Resources/ResourceManager.h"
-#include "Graphics/Renderer.h"
-#include "Input/InputSystem.h"
-#include "Core/Timer.h"
-#include "Math/Math.h"
+#include "Objects/GameObject.h"
+#include "Components/PhysicsComponent.h"
+#include "Components/SpriteComponent.h"
+#include "Core/Json.h"
+#include "Component/PlayerComponent.h"
 
-nc::InputSystem inputSystem;
-nc::ResourceManager resourceManager;
-nc::Renderer renderer;
-nc::FrameTimer timer;
+nc::Engine engine;
+nc::GameObject player;
+nc::PlayerComponent pc;
 
 int main(int, char**)
 {
-	/*nc::Timer timer;
-	for (size_t i = 0; i < 1000; i++) { std::sqrt(rand() % 100); }
+	engine.Startup();
 
-	std::cout << timer.ElapsedTicks() << std::endl;
-	std::cout << timer.ElapsedSeconds() << std::endl;*/
+	/*
+	rapidjson::Document document;
+	nc::json::Load("json.txt", document);
 
-	inputSystem.Startup();
-	renderer.Startup();
-	resourceManager.Startup();
+	std::string str;
+	nc::json::Get(document, "string", str);
+	std::cout << str << std::endl;
 
-	renderer.Create("Yuki's Pixel Game", 800, 600);
+	bool b;
+	nc::json::Get(document, "bool", b);
+	std::cout << b << std::endl;
+
+	int i1;
+	nc::json::Get(document, "integer1", i1);
+	std::cout << i1 << std::endl;
+
+	int i2;
+	nc::json::Get(document, "integer2", i2);
+	std::cout << i2 << std::endl;
+
+	float f;
+	nc::json::Get(document, "float", f);
+	std::cout << f << std::endl;
+
+	nc::Vector2 v2;
+	nc::json::Get(document, "vector2", v2);
+	std::cout << v2 << std::endl;
+
+	nc::Color color;
+	nc::json::Get(document, "color", color);
+	std::cout << color << std::endl;
+	*/
+
+	player.Create(&engine);
+
+	rapidjson::Document document;
+	nc::json::Load("player.txt", document);
+	player.Read(document);
+
+	nc::Component* component;
+	component = new nc::PhysicsComponent;
+	player.AddComponent(component);
+	component->Create();
+
+	component = new nc::SpriteComponent;
+	player.AddComponent(component);
+	component->Create();
+
+	component = new nc::PlayerComponent;
+	player.AddComponent(component);
+	component->Create();
 
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-	nc::Texture* background = resourceManager.Get<nc::Texture>("background.png", &renderer);
-	nc::Texture* car = resourceManager.Get<nc::Texture>("cars.png", &renderer);
+	nc::Texture* background = engine.GetSystem<nc::ResourceManager>()->Get<nc::Texture>("background.png", engine.GetSystem<nc::Renderer>());
 
-	float angle{ 0 };
-	nc::Vector2 position{ 400,300 };
 	nc::Vector2 velocity{ 0,0 };
 
 	SDL_Event event;
@@ -46,53 +84,27 @@ int main(int, char**)
 			break;
 		}
 		//update
-		timer.Tick();
+		engine.Update();
+		player.Update();
 
-		quit = (inputSystem.GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::PRESSED);
-
-		//player controller
-		if (inputSystem.GetButtonState(SDL_SCANCODE_A) == nc::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::PRESSED)
 		{
-			angle = angle - 200.0f * timer.DeltaTimer();
+			quit = true;
 		}
-		if (inputSystem.GetButtonState(SDL_SCANCODE_D) == nc::InputSystem::eButtonState::HELD)
-		{
-			angle = angle +200.0f * timer.DeltaTimer();
-		}
-		nc::Vector2 force{ 0,0 };
-		if (inputSystem.GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::HELD)
-		{
-			force = nc::Vector2::forward * 1000.0f;
-		}
-		if (inputSystem.GetButtonState(SDL_SCANCODE_S) == nc::InputSystem::eButtonState::HELD)
-		{
-			force = nc::Vector2::forward * -1000.0f;
-		}
-
-		inputSystem.Update();
-		resourceManager.Update();
-
-		//physics
-		force = nc::Vector2::Rotate(force, nc::DegreeToRadians(angle));
-		velocity = velocity + force * timer.DeltaTimer();
-		velocity = velocity * 0.95f;
-		position = position + velocity * timer.DeltaTimer();
 
 		//draw
-		renderer.BeginFrame();
+		engine.GetSystem<nc::Renderer>()->BeginFrame();
 
 		background->Draw({0, 0});
-		//{x,y,w,h}
-		car->Draw({ 125, 440, 60, 110 }, position, {1,1}, angle);
+		
+		player.Draw();
 
-		renderer.EndFrame();
+		engine.GetSystem<nc::Renderer>()->EndFrame();
 	}
 
-	inputSystem.Shutdown();
-	resourceManager.Shutdown();
+	engine.Shutdown();
 
 	IMG_Quit();
-	SDL_Quit();
 
 	return 0;
 }

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <SDL.h>
 #include <Windows.h>
+#include <iostream>
 
 namespace nc
 {
@@ -35,6 +37,13 @@ namespace nc
 		Color& operator -= (float s) { r -= s; g -= s; b -= s; return *this; }
 		Color& operator *= (float s) { r *= s; g *= s; b *= s; return *this; }
 		Color& operator /= (float s) { r /= s; g /= s; b /= s; return *this; }
+
+		friend std::ostream& operator <<(std::ostream& stream, Color& c)
+		{
+			stream << c.r << " " << c.g << " " << c.b << " " << c.a;
+
+			return stream;
+		};
 
 		friend std::istream& operator >> (std::istream& stream, Color& c);
 
