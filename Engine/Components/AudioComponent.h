@@ -21,6 +21,7 @@ namespace nc
 
 	protected:
 		std::string m_soundName;
+		std::string m_tag;
 		bool m_loop{ false };
 		bool m_playOnAwake{ false };
 

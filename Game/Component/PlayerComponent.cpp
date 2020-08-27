@@ -16,21 +16,25 @@ void PlayerComponent::Create(void* data)
 
 	void PlayerComponent::Update()
 	{
+		auto contatcs = m_owner->GetContactsWithTag("Floor");
+		bool onGround = !contatcs.empty();
+
 		//player controller
 		nc::Vector2 force{ 0,0 };
+
 		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_A) == nc::InputSystem::eButtonState::HELD)
 		{
-			force.x = -20000;
+			force.x = -75;
 		}
 
 		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_D) == nc::InputSystem::eButtonState::HELD)
 		{
-			force.x = 20000;
+			force.x = 75;
 		}
 
-		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::PRESSED)
+		if (onGround && m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::PRESSED)
 		{
-			force.y = -1000000;
+			force.y = -1350;
 			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
 			if (audioComponent)
 			{
@@ -44,6 +48,18 @@ void PlayerComponent::Create(void* data)
 		if (component)
 		{
 			component->SetForce(force);
+		}
+
+		//check collision
+		auto coinContatcs = m_owner->GetContactsWithTag("Coin");
+		for (auto contact : coinContatcs)
+		{
+			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
+			if (audioComponent)
+			{
+				audioComponent->Play();
+			}
+			contact->m_flags[GameObject::eFlags::DESTROY] = true;
 		}
 	}
 }

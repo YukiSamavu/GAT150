@@ -27,9 +27,9 @@ int main(int, char**)
 	
 	for (size_t i = 0; i < 10; i++)
 	{
-		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoBox");
-		gameObject->m_transform.position = { nc::random(0, 800), nc::random(0, 400) };
-		gameObject->m_transform.angle = nc::random(0, 360);
+		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoCoin");
+		gameObject->m_transform.position = { nc::random(0, 800), nc::random(350, 450) };
+		//gameObject->m_transform.angle = nc::random(0, 360);
 
 		scene.AddGameObject(gameObject);
 	}
@@ -49,7 +49,6 @@ int main(int, char**)
 		}
 		//update
 		engine.Update();
-		//player->Update();
 		scene.Update();
 
 		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::PRESSED)
