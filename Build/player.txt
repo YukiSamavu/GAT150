@@ -1,5 +1,5 @@
 {
 "position" : [400,300],
-"scale" : 2,
+"scale" : 1.5,
 "angle" : 180
 }

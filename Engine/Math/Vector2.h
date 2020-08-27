@@ -1,5 +1,6 @@
 #pragma once
 
+#include "box2d/box2d.h"
 #include <cmath>
 #include <istream>
 
@@ -10,8 +11,10 @@ namespace nc
 		float x, y;
 
 		Vector2() : x{ 0 }, y{ 0 }{}
+		Vector2(const b2Vec2& v) : x{ v.x }, y{ v.y }{}
 		Vector2(float x, float y) : x{ x }, y{ y }{}
 		Vector2(int x, int y) : x{ static_cast<float>(x) }, y{ static_cast<float>(y) }{}
+
 
 		float& operator [] (size_t index) { return (&x)[index]; }
 		const float& operator [] (size_t index) const { return (&x)[index]; }
@@ -40,6 +43,8 @@ namespace nc
 
 		Vector2 operator - () { return Vector2{ -x, -y }; }
 
+		operator b2Vec2 () const { return b2Vec2{ x,y }; }
+
 		friend std::ostream& operator << (std::ostream& stream, Vector2& v)
 		{
 			stream << v.x << " " << v.y;
@@ -63,6 +68,8 @@ namespace nc
 		static const Vector2 up;
 		static const Vector2 down;
 		static const Vector2 forward;
+		static const Vector2 one;
+		static const Vector2 zero;
 	};
 
 	inline float Vector2::Length() const

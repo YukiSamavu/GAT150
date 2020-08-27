@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "PlayerComponent.h"
 #include "Components/PhysicsComponent.h"
+#include "Components/AudioComponent.h"
 
 namespace nc
 {
 void PlayerComponent::Create(void* data)
 	{
+		m_owner = static_cast<GameObject*>(data);
 	}
 
 	void PlayerComponent::Destroy()
@@ -15,23 +17,27 @@ void PlayerComponent::Create(void* data)
 	void PlayerComponent::Update()
 	{
 		//player controller
+		nc::Vector2 force{ 0,0 };
 		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_A) == nc::InputSystem::eButtonState::HELD)
 		{
-			m_owner->m_transform.angle = m_owner->m_transform.angle - 200.0f * m_owner->m_enigne->GetTime().DeltaTimer();
+			force.x = -20000;
 		}
+
 		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_D) == nc::InputSystem::eButtonState::HELD)
 		{
-			m_owner->m_transform.angle = m_owner->m_transform.angle + 200.0f * m_owner->m_enigne->GetTime().DeltaTimer();
+			force.x = 20000;
 		}
-		nc::Vector2 force{ 0,0 };
-		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::HELD)
+
+		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::PRESSED)
 		{
-			force = nc::Vector2::forward * 1000.0f;
+			force.y = -1000000;
+			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
+			if (audioComponent)
+			{
+				audioComponent->Play();
+			}
 		}
-		if (m_owner->m_enigne->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_S) == nc::InputSystem::eButtonState::HELD)
-		{
-			force = nc::Vector2::forward * -1000.0f;
-		}
+
 		force = nc::Vector2::Rotate(force, nc::DegreeToRadians(m_owner->m_transform.angle));
 
 		PhysicsComponent* component = m_owner->GetComponent<PhysicsComponent>();
