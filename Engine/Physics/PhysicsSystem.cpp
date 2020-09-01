@@ -6,7 +6,7 @@ namespace nc
 {
     bool PhysicsSystem::Startup()
     {
-        b2Vec2 gravity = { 0,10 };
+        b2Vec2 gravity = { 0,20 };
         m_world = new b2World(gravity);
         m_conactListener = new ContactListener;
         m_world->SetContactListener(m_conactListener);

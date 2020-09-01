@@ -11,5 +11,11 @@ namespace nc
 		virtual Object* Clone() const override { return new PlayerComponent{ *this }; }
 
 		virtual void Update() override;
+
+		void OnCollisionEnter(const Event& event);
+		void OnCollisionExit(const Event& event);
+
+	protected:
+		int m_score{ 0 };
 	};
 }

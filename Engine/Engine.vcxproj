@@ -176,12 +176,14 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Components\AudioComponent.h" />
     <ClInclude Include="Components\Component.h" />
+    <ClInclude Include="Components\EnemyComponent.h" />
     <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\RigidBodyCompenent.h" />
     <ClInclude Include="Components\SpriteAnimationCompenent.h" />
     <ClInclude Include="Components\SpriteComponent.h" />
     <ClInclude Include="Core\Assert.h" />
+    <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\Factory.h" />
     <ClInclude Include="Core\Json.h" />
     <ClInclude Include="Core\Singleton.h" />
@@ -213,11 +215,13 @@
     <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Audio\Sound.cpp" />
     <ClCompile Include="Components\AudioComponent.cpp" />
+    <ClCompile Include="Components\EnemyComponent.cpp" />
     <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Components\RigidBodyCompenent.cpp" />
     <ClCompile Include="Components\SpriteAnimationCompenent.cpp" />
     <ClCompile Include="Components\SpriteComponent.cpp" />
     <ClCompile Include="Core\Assert.cpp" />
+    <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Json.cpp" />
     <ClCompile Include="Core\Timer.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -240,9 +244,6 @@
     <ClCompile Include="Physics\ContactListener.cpp" />
     <ClCompile Include="Physics\PhysicsSystem.cpp" />
     <ClCompile Include="Resources\ResourceManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Build\scene.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

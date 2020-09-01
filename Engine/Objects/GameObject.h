@@ -7,6 +7,7 @@
 namespace nc
 {
 	class Component;
+	class Scene;
 
 	class GameObject : public Object
 	{
@@ -53,6 +54,7 @@ namespace nc
 
 		Transform m_transform;
 		Engine* m_enigne{ nullptr };
+		Scene* m_scene{ nullptr };
 
 	protected:
 		std::vector<Component*> m_components;

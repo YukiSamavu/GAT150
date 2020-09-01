@@ -3,14 +3,22 @@
 #include "Objects/GameObject.h"
 #include "Core/Json.h"
 #include "Component/PlayerComponent.h"
+#include "Components/EnemyComponent.h"
 #include "Core/Factory.h"
 #include "Objects/ObjectFactory.h"
 #include "Objects/Scene.h"
+#include "TileMap.h"
+#include "Core/EventManager.h"
 
 nc::Engine engine;
 nc::Scene scene;
 
-//Make A demo-durby that updates when a car is destroyed explode and make car look more damaged
+void OnPlayerDead(const nc::Event& event)
+{
+	int* pdata = static_cast<int*>(event.data);
+
+	std::cout << "Player Dead : " << *pdata << std::endl ;
+}
 
 int main(int, char**)
 {
@@ -20,19 +28,22 @@ int main(int, char**)
 
 	nc::ObjectFactory::Instance().Initialize();
 	nc::ObjectFactory::Instance().Register("PlayerComponent", new nc::Creator<nc::PlayerComponent, nc::Object>);
+	nc::ObjectFactory::Instance().Register("EnemyComponent", new nc::Creator<nc::EnemyComponent, nc::Object>);
+
+	nc::EventManager::Instance().Subscribe("PlayerDead", &OnPlayerDead);
 
 	rapidjson::Document document;
 	nc::json::Load("scene.txt", document);
 	scene.Read(document);
-	
-	for (size_t i = 0; i < 10; i++)
-	{
-		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoCoin");
-		gameObject->m_transform.position = { nc::random(0, 800), nc::random(350, 450) };
-		//gameObject->m_transform.angle = nc::random(0, 360);
 
-		scene.AddGameObject(gameObject);
-	}
+	nc::json::Load("tilemap.txt", document);
+	nc::TileMap tilemap;
+	tilemap.Read(document);
+	tilemap.Create(&scene);
+
+	nc::json::Load("Texture/sheet1.png", document);
+	tilemap.Read(document);
+	tilemap.Create(&scene);
 
 	nc::Vector2 velocity{ 0,0 };
 

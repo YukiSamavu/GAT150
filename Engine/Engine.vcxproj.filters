@@ -146,6 +146,12 @@
     <ClInclude Include="Physics\ContactListener.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Components\EnemyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\EventManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -226,10 +232,11 @@
     <ClCompile Include="Physics\ContactListener.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Build\scene.txt">
-      <Filter>Source Files</Filter>
-    </Text>
+    <ClCompile Include="Components\EnemyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\EventManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

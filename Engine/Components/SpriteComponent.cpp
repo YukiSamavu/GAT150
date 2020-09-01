@@ -28,6 +28,6 @@ namespace nc
 	void SpriteComponent::Draw()
 	{
 		Texture* texture = m_texture = m_owner->m_enigne->GetSystem<nc::ResourceManager>()->Get<nc::Texture>(m_textureName, m_owner->m_enigne->GetSystem<nc::Renderer>());
-		texture->Draw(m_rect, m_owner->m_transform.position, m_owner->m_transform.angle, nc::Vector2::one * m_owner->m_transform.scale, m_origin);
+		texture->Draw(m_rect, m_owner->m_transform.position, m_owner->m_transform.angle, nc::Vector2::one * m_owner->m_transform.scale, m_origin, m_flip);
 	}
 }
